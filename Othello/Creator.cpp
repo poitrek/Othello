@@ -67,20 +67,19 @@ void Creator::FirstPawns(std::vector<Pawn*> &PawnVector, Field **field)
 	delete veryFirst;
 }
 
-SideMenu Creator::CreateSideMenu(sf::RenderWindow & window, Board & board)
-{
-	SideMenu sideMenu;
+void Creator::CreateSideMenu(SideMenu &sideMenu, sf::RenderWindow & window, Board & board)
+{	
 	const float posBuf1 = 5.0f;
 	const float posBuf2 = 5.0f;
 	const float posBuf3 = 20.0f;
+
 	sf::Vector2f pos;
 	pos.x = board.getPosition().x + board.getSize().x + posBuf1;
 	pos.y = posBuf2;
 	sideMenu.setPosition(pos);
 	float width = window.getSize().x - pos.x - posBuf2;
 	float height = window.getSize().y - posBuf2 - posBuf3;
-	sideMenu.setSize({ width, height });
-	sideMenu.setLabels();
 
-	return sideMenu;
+	sideMenu.setSize({ width, height });
+	sideMenu.setLabels();	
 }

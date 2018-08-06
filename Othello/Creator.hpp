@@ -9,7 +9,7 @@ public:
 	static void DrawFields(Board &board, Field **&fieldTab);
 	static std::vector<Field*> SetFieldVector(Field **fieldTab);
 	static void FirstPawns(std::vector<Pawn*> &PawnVector, Field **field);
-	static SideMenu CreateSideMenu(sf::RenderWindow& window, Board& board);
+	static void CreateSideMenu(SideMenu &sideMenu, sf::RenderWindow& window, Board& board);
 
 };
 

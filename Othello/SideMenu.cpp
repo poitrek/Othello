@@ -133,13 +133,13 @@ void SideMenu::hide_message1()
 void SideMenu::draw(sf::RenderTarget& target)
 {
 	target.draw(this->sprite);
-	///target.draw(this->label1);
-	///target.draw(this->label2);
+	target.draw(this->label1);
+	target.draw(this->label2);
 	target.draw(this->playerThumbnail);
 	target.draw(this->playerThumbnail_w);
 	target.draw(this->playerThumbnail_b);
-	///target.draw(this->num_w);
-	///target.draw(this->num_b);
+	target.draw(this->num_w);
+	target.draw(this->num_b);
 	if (message1_enable)
 		target.draw(this->message1);
 }
