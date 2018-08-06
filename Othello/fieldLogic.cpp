@@ -29,6 +29,7 @@ State opponentIndex(State playerIndex)
 	case p1: return p2;
 	case p2: return p1;
 	case none: return none;
+	default: return none;
 	}
 }
 
@@ -63,7 +64,7 @@ bool isMoveValid(Field tab[][8], Field *F, State plInd)
 	return false; // Jeœli sprawdziliœmy wszystkie kierunki (wszystkie wersory) bez dostêpnego ruchu, to ruch nie jest dostêpny
 }
 
-void moveOn(Field tab[][8], Field *F, State plInd)
+void changePawns(Field tab[][8], Field *F, State plInd)
 {
 	State oppInd = opponentIndex(plInd);
 	for (pair_ versor : Versor) // Dla ka¿dego z 8 wersorów (8 kierunków)
@@ -104,6 +105,8 @@ void moveOn(Field tab[][8], Field *F, State plInd)
 
 
 // Poni¿sze funkcje jednak siê nie przyda³y
+
+/*
 
 std::pair <int, int> findIndex(Field tab[][8], Field *F) // Znajduje indeks obiektu(pola) w 2-wym. tablicy obiektów
 {
@@ -158,3 +161,4 @@ Field *bottom(Field tab[][8], Field *F) // Zwraca wskaŸnik na pole znajduj¹ce si
 		return &tab[ind.first][ind.second + 1];
 }
 
+*/

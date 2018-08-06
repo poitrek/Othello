@@ -1,28 +1,10 @@
 #pragma once
-#include "ObiektGraficzny.h"
+#include "GameObject.h"
 #include "circleTexture.h"
 #include "Field.h"
 
-struct numberOfPawns {
-	int blacks{ 2 };
-	int whites{ 2 };
-	void update(std::vector <Field*> &FieldTab)
-	{
-		int b = 0, w = 0;
-		for (Field *F : FieldTab)
-		{
-			if (F->Get() == p1)
-				b++;
-			if (F->Get() == p2)
-				w++;
-		}
-		blacks = b;
-		whites = w;
-		//std::cout << "Number of pawns: black " << blacks << ", white " << whites << std::endl;
-	}
-};
 
-class SideMenu : public ObiektGraficzny
+class SideMenu : public GameObject
 {
 private:
 	const std::string file_name = "../Othello/Side menu.jpg";
@@ -46,10 +28,10 @@ public:
 	SideMenu();
 	~SideMenu();
 	void setLabels();
-	void update(State curPlayer, numberOfPawns numberOfPawns);
+	void update(State curPlayer, std::pair<int, int> numOfPawns);
 	void show_message1(std::string mode, State);
 	void update_clock_message1();
 	void hide_message1();
-	void draw(sf::RenderWindow& window);
+	void draw(sf::RenderTarget& target);
 };
 

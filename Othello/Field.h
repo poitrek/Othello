@@ -1,23 +1,25 @@
 #pragma once
-#include "ObiektGraficzny.h"
+#include "GameObject.h"
 #include "Pawn.h"
 #include "circleTexture.h"
 
-
-class Field : public ObiektGraficzny
+class Field : public GameObject
 {
 private:
 	static const std::string file_name; // Nazwa pliku przechowuj¹cego teksturê pola
 	static sf::Texture *texture;
+	static float fieldSize;
 	float scaleFactor{ 0.25f }; /// Czynnik, przez jaki musimy przemno¿yæ wymiary tekstury, aby uzyskaæ
 							    ///  ¿¹dane wymiary sprite'a (chyba ju¿ niepotrzebne)
+
 	State state; // Stan pola (przynale¿noœæ)
 	Pawn *pawn; // WskaŸnik na (ewentualny) znajduj¹cy siê na polu pionek
 	int ind_X;
 	int ind_Y;
+
+	static int _ref_count;
 public:
 	Field();  // Domyœlny konstruktor
-	Field(sf::Vector2f position); // Konstruktor ustawiaj¹cy pozycjê (niepotrzebny)
 	~Field();
 
 	sf::Vector2f getSize();
@@ -31,14 +33,14 @@ public:
 							
 	void setPosition(float x, float y); // Ustawiamy pozycjê z u¿yciem 2 float'ów
 	
-	static sf::Sprite pawnShadow; // Pojawiaj¹ca siê poœwiata pionka, gdy chcemy go postawiæ
-	static void setPawnShadow(float pawnSize);
+	static GameObject* pawnShadow; // Pojawiaj¹ca siê poœwiata pionka, gdy chcemy go postawiæ
+	
+	
+	static void setPawnShadow();
 	static void updatePawnShadow(State curPlayer);
-	void setPawnShadowPosition();
-	void Highlight(State curPlayer, float pawnSize); /// Prawdopodobnie nie bêdzie potrzebne
-	void Standard(); /// Prawdopodobnie nie bêdzie potrzebne
-
-	//friend class Pawn;
-	friend Pawn::Pawn(Field&, State, float); // Konstruktor klasy Pionek jest funkcj¹ zaprzyjaŸnion¹ z t¹ klas¹
+	static void setPawnShadowPosition(Field *field);
+	
+	friend class Creator;
+	friend Pawn::Pawn(Field&, State); // Konstruktor klasy Pionek jest funkcj¹ zaprzyjaŸnion¹ z t¹ klas¹
 };
 

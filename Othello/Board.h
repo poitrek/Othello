@@ -1,6 +1,6 @@
 #pragma once
-#include "ObiektGraficzny.h"
-class Board : public ObiektGraficzny
+#include "GameObject.h"
+class Board : public GameObject
 {
 private:
 	const std::string file_name = "../Othello/Board texture.jpg";

@@ -36,11 +36,11 @@ void SideMenu::setLabels()
 	label1.setPosition(pos1);
 	label2.setPosition(pos1 + sf::Vector2f{ 0, 160.0f });
 		
-	//tex_setup();
+	tex_setup();
 	playerThumbnail.setTexture(*texture_b);
 	sf::Vector2f vec{55.0f, 55.0f};
 	sf::Vector2f vec2{ 37.5f, 37.5f };
-	setSpriteSize(playerThumbnail, vec);	
+	setSpriteSize(playerThumbnail, vec);
 	playerThumbnail.setPosition(label1.getPosition() + sf::Vector2f(35.0f, 35.0f));
 
 	playerThumbnail_b.setTexture(*texture_b);
@@ -69,7 +69,7 @@ void SideMenu::setLabels()
 	message1_enable = false;
 }
 
-void SideMenu::update(State curPlayer, numberOfPawns numberOfPawns)
+void SideMenu::update(State curPlayer, std::pair<int, int> numOfPawns)
 {
 	switch(curPlayer)
 	{
@@ -79,8 +79,8 @@ void SideMenu::update(State curPlayer, numberOfPawns numberOfPawns)
 	case p2:
 		playerThumbnail.setTexture(*texture_w);
 	}
-	num_b.setString(std::to_string(numberOfPawns.blacks));
-	num_w.setString(std::to_string(numberOfPawns.whites));
+	num_b.setString(std::to_string(numOfPawns.first));
+	num_w.setString(std::to_string(numOfPawns.second));
 }
 
 void SideMenu::show_message1(std::string mode, State state = none)
@@ -130,16 +130,16 @@ void SideMenu::hide_message1()
 	message1_enable = false;
 }
 
-void SideMenu::draw(sf::RenderWindow& window)
+void SideMenu::draw(sf::RenderTarget& target)
 {
-	window.draw(this->sprite);
-	window.draw(this->label1);
-	window.draw(this->label2);
-	window.draw(this->playerThumbnail);
-	window.draw(this->playerThumbnail_w);
-	window.draw(this->playerThumbnail_b);
-	window.draw(this->num_w);
-	window.draw(this->num_b);
+	target.draw(this->sprite);
+	///target.draw(this->label1);
+	///target.draw(this->label2);
+	target.draw(this->playerThumbnail);
+	target.draw(this->playerThumbnail_w);
+	target.draw(this->playerThumbnail_b);
+	///target.draw(this->num_w);
+	///target.draw(this->num_b);
 	if (message1_enable)
-		window.draw(this->message1);
+		target.draw(this->message1);
 }

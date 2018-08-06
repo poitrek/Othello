@@ -8,12 +8,9 @@ const std::string Pawn::file_name_b = "../Othello/black_circle.png";
 const std::string Pawn::file_name_w = "../Othello/white_circle.png";
 sf::Texture* Pawn::texture_b;
 sf::Texture* Pawn::texture_w;
+float Pawn::pawnSize;
 
-Pawn::Pawn()
-{
-}
-
-Pawn::Pawn(Field &F, State playerIndex, float pawnSize)
+Pawn::Pawn(Field &F, State playerIndex)
 {
 	
 	switch (playerIndex)
@@ -41,6 +38,12 @@ Pawn::Pawn(Field &F, State playerIndex, float pawnSize)
 
 Pawn::~Pawn()
 {	
+}
+
+void Pawn::Place(std::vector<Pawn*> pawnTab)
+{
+	pawnTab.push_back(this);
+	Renderer::Add(this, 3);
 }
 
 void Pawn::setTextures()
@@ -71,4 +74,9 @@ void Pawn::Set(State playerIndex)
 		break;
 	}
 	return;
+}
+
+float Pawn::getPawnSize()
+{
+	return Pawn::pawnSize;
 }

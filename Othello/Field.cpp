@@ -8,9 +8,14 @@ extern void tex_setup();
 
 const std::string Field::file_name = "../Othello/Pole.jpg";
 sf::Texture* Field::texture;
+float Field::fieldSize;
+
+int Field::_ref_count{ 0 };
 
 Field::Field()
 {
+	_ref_count++;
+
 	if (texture == nullptr)
 	{
 		texture = new sf::Texture;
@@ -28,25 +33,15 @@ Field::Field()
 	this->pawn = nullptr;
 }
 
-Field::Field(sf::Vector2f pos = { 20.0f, 20.0f }) // Nieu¿ywany
-{
-	if (texture == nullptr)
-	{
-		texture = new sf::Texture;
-		if (!texture->loadFromFile(file_name))
-		{
-			std::cout << "Error [Board::Board()]: nie udalo sie otworzyc pliku " << file_name << std::endl;
-		}
-	}
-	sprite.setTexture(*texture);
-	//sprite.setScale(0.25, 0.25);
-	sprite.setPosition(pos);
-}
-
-
 Field::~Field()
-{	
+{
+	_ref_count--;
+	if (_ref_count == 0)
+	{
+		delete pawnShadow;
+	}
 }
+
 
 sf::Vector2f Field::getSize()
 {
@@ -65,15 +60,24 @@ void Field::setPosition(float x, float y)
 	sprite.setPosition(x, y);
 }
 
-sf::Sprite Field::pawnShadow;
 
-void Field::setPawnShadow(float pawnSize)
+//std::shared_ptr<GameObject> Field::pawnShadow(nullptr);
+GameObject* Field::pawnShadow(nullptr);
+
+
+void Field::setPawnShadow()
 {
-	tex_setup();
-	pawnShadow.setTexture(*texture_b); // tylko tymczasowo
-	pawnShadow.setOrigin(pawnShadow.getTexture()->getSize().x / 2.0f, pawnShadow.getTexture()->getSize().y / 2.0f);
-	setSpriteSize(pawnShadow, sf::Vector2f(pawnSize, pawnSize));
-	pawnShadow.setColor(sf::Color(255, 255, 255, 127)); // przezroczysty	
+	//pawnShadow = std::shared_ptr<GameObject>(new GameObject);
+	pawnShadow = new GameObject;
+	sf::Sprite *spr = pawnShadow->getSprite();
+	//tex_setup();
+	spr->setTexture(*texture_b); // tylko tymczasowo
+	pawnShadow->setOriginToCenter();
+	pawnShadow->setSize(sf::Vector2f(Pawn::getPawnSize(), Pawn::getPawnSize()));
+	spr->setColor(sf::Color(255, 255, 255, 127));
+
+	Field::updatePawnShadow(p1);
+	
 }
 
 void Field::updatePawnShadow(State curPlayer)
@@ -81,25 +85,15 @@ void Field::updatePawnShadow(State curPlayer)
 	switch (curPlayer)
 	{
 	case p1:
-		pawnShadow.setTexture(*texture_b);
+		pawnShadow->setTexture(texture_b);
 		break;
 	case p2:
-		pawnShadow.setTexture(*texture_w);
+		pawnShadow->setTexture(texture_w);
 		break;
 	}
 }
 
-void Field::setPawnShadowPosition()
+void Field::setPawnShadowPosition(Field *field)
 {
-	pawnShadow.setPosition(getPosition() + getSize() / 2.0f);
-}
-
-void Field::Highlight(State curPlayer, float pawnSize)
-{	
-	sprite.setColor(sf::Color(255, 255, 255, 190));
-}
-
-void Field::Standard()
-{	
-	sprite.setColor(sf::Color(255, 255, 255));
+	pawnShadow->setPosition(field->getPosition() + field->getSize() / 2.0f);
 }

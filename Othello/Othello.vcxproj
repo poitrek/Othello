@@ -151,10 +151,13 @@
   <ItemGroup>
     <ClInclude Include="Board.h" />
     <ClInclude Include="circleTexture.h" />
+    <ClInclude Include="Creator.hpp" />
+    <ClInclude Include="Engine.hpp" />
     <ClInclude Include="Field.h" />
-    <ClInclude Include="fieldLogic.h" />
-    <ClInclude Include="ObiektGraficzny.h" />
+    <ClInclude Include="GameObject.h" />
+    <ClInclude Include="MouseHandler.hpp" />
     <ClInclude Include="Pawn.h" />
+    <ClInclude Include="Renderer.hpp" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="SideMenu.h" />
     <ClInclude Include="stdafx.h" />
@@ -163,11 +166,14 @@
   <ItemGroup>
     <ClCompile Include="Board.cpp" />
     <ClCompile Include="circleTexture.cpp" />
+    <ClCompile Include="Creator.cpp" />
+    <ClCompile Include="Engine.cpp" />
     <ClCompile Include="Field.cpp" />
-    <ClCompile Include="fieldLogic.cpp" />
-    <ClCompile Include="ObiektGraficzny.cpp" />
+    <ClCompile Include="GameObject.cpp" />
+    <ClCompile Include="MouseHandler.cpp" />
     <ClCompile Include="Othello.cpp" />
     <ClCompile Include="Pawn.cpp" />
+    <ClCompile Include="Renderer.cpp" />
     <ClCompile Include="SideMenu.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>

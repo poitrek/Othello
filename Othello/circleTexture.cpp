@@ -17,8 +17,10 @@ void setSpriteSize(sf::Sprite &sprite, sf::Vector2f vec)
 
 void tex_setup()
 {
-	texture_b = new sf::Texture;
-	texture_w = new sf::Texture;
+	if (texture_b == nullptr)
+		texture_b = new sf::Texture;
+	if (texture_w == nullptr)
+		texture_w = new sf::Texture;
 	if (!texture_b->loadFromFile(file_name_b))
 	{
 		std::cout << "Error [circleTexture::setup()]: nie udalo sie otworzyc pliku " << file_name_b << std::endl;
