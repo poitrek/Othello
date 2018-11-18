@@ -19,11 +19,11 @@ private:
 public:
 	friend class Creator;
 	Pawn(){}
-	Pawn(Field &F, State playerIndex);
+	Pawn(Field &F, FieldState playerIndex);
 	
 	~Pawn();
 	void Place(std::vector<Pawn*> pawnTab);
-	void Set(State playerIndex);
+	void Set(FieldState playerIndex);
 
 	static float getPawnSize();
 

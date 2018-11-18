@@ -48,7 +48,7 @@ sf::Vector2f Field::getSize()
 	return { sprite.getScale().x * texture->getSize().x, sprite.getScale().y * texture->getSize().y };
 }
 
-void Field::Set(State _state)
+void Field::SetState(FieldState _state)
 {
 	this->state = _state;
 	if (pawn != nullptr)
@@ -80,7 +80,7 @@ void Field::setPawnShadow()
 	
 }
 
-void Field::updatePawnShadow(State curPlayer)
+void Field::updatePawnShadow(FieldState curPlayer)
 {
 	switch (curPlayer)
 	{

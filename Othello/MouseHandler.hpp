@@ -10,9 +10,12 @@ public:
 
 	static void update(sf::RenderWindow &window);
 
-	static bool mouseHovered(GameObject *obj, sf::RenderTarget &target);
+	// The sf::RenderTarget &target parameter is probably unnecessary
+	// Previously: 
+	//bool MouseHandler::mouseHovered(GameObject *obj, sf::RenderTarget &target);
+	static bool mouseHovered(GameObject *obj);
 
-	static bool mouseClicked(GameObject &obj, sf::RenderTarget &target);
+	static bool mouseClicked(GameObject &obj);
 
 	static bool singleClick(sf::Mouse::Button btn);
 

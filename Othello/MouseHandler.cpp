@@ -15,7 +15,7 @@ void MouseHandler::update(sf::RenderWindow &window)
 	currentPos = sf::Mouse::getPosition(window);
 }
 
-bool MouseHandler::mouseHovered(GameObject *obj, sf::RenderTarget &target)
+bool MouseHandler::mouseHovered(GameObject *obj)
 {
 	sf::Vector2f gPos = obj->getPosition();
 	sf::Vector2f gSize = obj->getSize();
@@ -24,9 +24,9 @@ bool MouseHandler::mouseHovered(GameObject *obj, sf::RenderTarget &target)
 		currentPos.y > gPos.y && currentPos.y < gPos.y + gSize.y);
 }
 
-bool MouseHandler::mouseClicked(GameObject & obj, sf::RenderTarget &target)
+bool MouseHandler::mouseClicked(GameObject & obj)
 {
-	return (mouseHovered(&obj, target) && singleClick(sf::Mouse::Left));
+	return (mouseHovered(&obj) && singleClick(sf::Mouse::Left));
 }
 
 bool MouseHandler::singleClick(sf::Mouse::Button btn)

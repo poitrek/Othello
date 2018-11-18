@@ -154,7 +154,9 @@
     <ClInclude Include="Creator.hpp" />
     <ClInclude Include="Engine.hpp" />
     <ClInclude Include="Field.h" />
+    <ClInclude Include="Game.hpp" />
     <ClInclude Include="GameObject.h" />
+    <ClInclude Include="Machine.hpp" />
     <ClInclude Include="MouseHandler.hpp" />
     <ClInclude Include="Pawn.h" />
     <ClInclude Include="Renderer.hpp" />
@@ -169,7 +171,9 @@
     <ClCompile Include="Creator.cpp" />
     <ClCompile Include="Engine.cpp" />
     <ClCompile Include="Field.cpp" />
+    <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameObject.cpp" />
+    <ClCompile Include="Machine.cpp" />
     <ClCompile Include="MouseHandler.cpp" />
     <ClCompile Include="Othello.cpp" />
     <ClCompile Include="Pawn.cpp" />

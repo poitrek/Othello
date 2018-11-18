@@ -69,7 +69,7 @@ void SideMenu::setLabels()
 	message1_enable = false;
 }
 
-void SideMenu::update(State curPlayer, std::pair<int, int> numOfPawns)
+void SideMenu::update(FieldState curPlayer, std::pair<int, int> numOfPawns)
 {
 	switch(curPlayer)
 	{
@@ -83,7 +83,7 @@ void SideMenu::update(State curPlayer, std::pair<int, int> numOfPawns)
 	num_w.setString(std::to_string(numOfPawns.second));
 }
 
-void SideMenu::show_message1(std::string mode, State state = none)
+void SideMenu::show_message1(std::string mode, FieldState state = none)
 {
 	if (mode == "EndOfGame")
 	{

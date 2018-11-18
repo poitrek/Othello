@@ -28,8 +28,8 @@ public:
 	SideMenu();
 	~SideMenu();
 	void setLabels();
-	void update(State curPlayer, std::pair<int, int> numOfPawns);
-	void show_message1(std::string mode, State);
+	void update(FieldState curPlayer, std::pair<int, int> numOfPawns);
+	void show_message1(std::string mode, FieldState);
 	void update_clock_message1();
 	void hide_message1();
 	void draw(sf::RenderTarget& target);

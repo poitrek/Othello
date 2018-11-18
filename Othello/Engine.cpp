@@ -1,10 +1,13 @@
 #include "stdafx.h"
 #include "Engine.hpp"
-
+#include "Game.hpp"
 
 Field* Engine::fCur{ nullptr };
 
-State Engine::CurPlayer{ p1 };
+FieldState Engine::CurPlayer{ p1 };
+
+const FieldState Engine::PlayerIndex{ p1 };
+const FieldState Engine::ComputerIndex{ p2 };
 
 std::vector<Field*> Engine::AvailableFields;
 
@@ -17,14 +20,16 @@ int Engine::NumberOfPawns::whites{ 2 };
 
 
 
-void Engine::MakeTheMove(std::vector<Field*> &FieldVector, std::vector<Pawn*>& PawnVector)
+void Engine::MakeTheMove(std::vector<Field*> &FieldVector, std::vector<Pawn*>& PawnVector, Field *field)
 {
-	Pawn *P = new Pawn(*fCur, CurPlayer); // Tworzymy na tym polu w³aœciwy pionek
+	Pawn *P = new Pawn(*field, CurPlayer); // Tworzymy na tym polu w³aœciwy pionek
 	//P->Place(PawnVector);
 	PawnVector.push_back(P); // Pionek wstawiamy do wektora
 	Renderer::Add(P, 3);
 
-	Logic::changePawns(fCur, CurPlayer); // Zmieniamy odpowiednie pionki
+	auto FieldsToAttack = Logic::findAttackedPawns(field, CurPlayer); // Zmieniamy odpowiednie pionki
+	ResolveFields(FieldsToAttack, CurPlayer);
+	
 	NumberOfPawns::update(FieldVector); // Update'ujemy liczby pionków
 
 	ChangeCurrentPlayer(); // Zmieniamy gracza bie¿¹cego
@@ -42,9 +47,12 @@ void Engine::HandleNextMove(std::vector<Field*>& FieldVector, SideMenu & sideMen
 		std::cout << "Gracz " << Logic::opponentIndex(CurPlayer) << " nie ma dostepnych ruchow. Kontynuuje " << CurPlayer << std::endl;
 		sideMenu.show_message1("NoMoveAvailable", CurPlayer);
 	}
-	State EoG = Engine::EndOfGame(FieldVector);
-	if (EoG != none)
-		sideMenu.show_message1("EndOfGame", EoG);
+	FieldState IGO = Engine::IsGameOver(FieldVector);
+	if (IGO != none)
+	{
+		Game::State = Game::Over;
+		sideMenu.show_message1("EndOfGame", IGO);
+	}
 	fCur->updatePawnShadow(CurPlayer);
 
 	std::pair<int, int> nOP_pair;
@@ -55,7 +63,7 @@ void Engine::HandleNextMove(std::vector<Field*>& FieldVector, SideMenu & sideMen
 
 }
 
-void Engine::HandleMouseHover(std::vector<Field*>& FieldVector, sf::RenderTarget &target)
+void Engine::HandleMouseHover(std::vector<Field*>& FieldVector)
 {
 	/*
 	fCur = nullptr;
@@ -72,7 +80,7 @@ void Engine::HandleMouseHover(std::vector<Field*>& FieldVector, sf::RenderTarget
 	fCur = nullptr;
 	for (Field *f : Engine::AvailableFields)
 	{
-		if (MouseHandler::mouseHovered(f, target))
+		if (MouseHandler::mouseHovered(f))
 		{
 			fCur = f;
 			break;
@@ -92,16 +100,24 @@ void Engine::HandleMouseHover(std::vector<Field*>& FieldVector, sf::RenderTarget
 }
 
 void Engine::HandlePlayerMove(std::vector<Field*>& FieldVector,
-	std::vector<Pawn*> &PawnVector, SideMenu &sideMenu, sf::RenderTarget & target)
+	std::vector<Pawn*> &PawnVector, SideMenu &sideMenu)
 {
 
 	if (fCur != nullptr)
-		if (MouseHandler::mouseClicked(*fCur, target))
+		if (MouseHandler::mouseClicked(*fCur))
 		{
-			Engine::MakeTheMove(FieldVector, PawnVector);
+			Engine::MakeTheMove(FieldVector, PawnVector, fCur);
 			Engine::HandleNextMove(FieldVector, sideMenu);
 		}
 
+}
+
+void Engine::ResolveFields(std::vector<Field*>& AttackedFields, FieldState NewOwner)
+{
+	for (Field *f : AttackedFields)
+	{
+		f->SetState(NewOwner);
+	}
 }
 
 void Engine::UpdateAvailableFields(std::vector<Field*>& FieldVector)
@@ -112,7 +128,7 @@ void Engine::UpdateAvailableFields(std::vector<Field*>& FieldVector)
 	{
 		bool _add;
 
-		if (F->Get() != none)
+		if (F->GetState() != none)
 			_add = false;
 		else
 		{
@@ -143,7 +159,7 @@ void Engine::ChangeCurrentPlayer()
 	}
 }
 
-State Engine::EndOfGame(std::vector<Field*>& FieldVector)
+FieldState Engine::IsGameOver(std::vector<Field*>& FieldVector)
 {
 	// p1 - czarny, p2 - bia³y
 	if (NumberOfPawns::blacks == 0)
@@ -152,7 +168,7 @@ State Engine::EndOfGame(std::vector<Field*>& FieldVector)
 		return p1;
 
 	for (Field* F : FieldVector) // Jeœli przynajmniej 1 pole jest puste
-		if (F->Get() == none)
+		if (F->GetState() == none)
 			return none;
 	if (NumberOfPawns::blacks > NumberOfPawns::whites)
 		return p1;
@@ -160,7 +176,17 @@ State Engine::EndOfGame(std::vector<Field*>& FieldVector)
 		return p2;
 }
 
-State Engine::GetCurrentPlayer()
+FieldState Engine::GetPlayerIndex()
+{
+	return FieldState(PlayerIndex);
+}
+
+FieldState Engine::GetComputerIndex()
+{
+	return FieldState(ComputerIndex);
+}
+
+FieldState Engine::GetCurrentPlayer()
 {
 	return CurPlayer;
 }
@@ -200,7 +226,7 @@ Field* Engine::Logic::neighbr(Field *F, pair_ versor)
 		return &FieldTab[indX][indY];
 }
 
-State Engine::Logic::opponentIndex(State playerIndex)
+FieldState Engine::Logic::opponentIndex(FieldState playerIndex)
 {
 	switch (playerIndex)
 	{
@@ -212,29 +238,29 @@ State Engine::Logic::opponentIndex(State playerIndex)
 }
 
 // Funkcja sprawdzaj¹ca, czy na polu o adresie F gracz o indeksie plInd mo¿e postawiæ pionek
-bool Engine::Logic::isMoveValid(Field *F, State plInd)
+bool Engine::Logic::isMoveValid(Field *F, FieldState plInd)
 {
-	State oppInd = opponentIndex(plInd); // Indeks przeciwnika
+	FieldState oppInd = opponentIndex(plInd); // Indeks przeciwnika
 	for (pair_ versor : Versor) // Dla ka¿dego z 8 wersorów (8 kierunków)
 	{
 		Field *N = neighbr(F, versor); // Znajdujemy adres s¹siada PRZESUNIÊTEGO O DANY WERSOR
 		if (N == nullptr)
 			continue;
-		if (N->Get() == oppInd) // Jeœli ten s¹siad nale¿y do przeciwnika
+		if (N->GetState() == oppInd) // Jeœli ten s¹siad nale¿y do przeciwnika
 		{
 			while (true)
 			{
 				Field *Npp = neighbr(N, versor); // Bierzemy nastêpnika pola N
 				if (Npp == nullptr) // Jeœli nastêpnik N nie istnieje (jesteœmy przy krawêdzi planszy)
 					break;
-				if (Npp->Get() == none) // Jeœli nastêpnik N jest pusty, to ruch w tym kierunku niedozwolony
+				if (Npp->GetState() == none) // Jeœli nastêpnik N jest pusty, to ruch w tym kierunku niedozwolony
 					break;
-				if (Npp->Get() == oppInd) // Jeœli nastêpnik N te¿ nale¿y do przeciwnika, jedziemy dalej
+				if (Npp->GetState() == oppInd) // Jeœli nastêpnik N te¿ nale¿y do przeciwnika, jedziemy dalej
 				{
 					N = Npp;
 					continue;
 				}
-				if (Npp->Get() == plInd) // Jeœli nastêpnik N nale¿y do nas, to ruch w tym kierunku jest mo¿liwy
+				if (Npp->GetState() == plInd) // Jeœli nastêpnik N nale¿y do nas, to ruch w tym kierunku jest mo¿liwy
 					return true;
 			}
 		}
@@ -242,15 +268,18 @@ bool Engine::Logic::isMoveValid(Field *F, State plInd)
 	return false; // Jeœli sprawdziliœmy wszystkie kierunki (wszystkie wersory) bez dostêpnego ruchu, to ruch nie jest dostêpny
 }
 
-void Engine::Logic::changePawns(Field *F, State plInd)
+std::vector<Field*> Engine::Logic::findAttackedPawns(Field *F, FieldState plInd)
 {
-	State oppInd = opponentIndex(plInd);
+	FieldState oppInd = opponentIndex(plInd);
+
+	std::vector<Field*> FieldsToAttack;
+
 	for (pair_ versor : Versor) // Dla ka¿dego z 8 wersorów (8 kierunków)
 	{
 		Field *N = neighbr(F, versor); // Znajdujemy adres s¹siada PRZESUNIÊTEGO O DANY WERSOR
 		if (N == nullptr)
 			continue;
-		if (N->Get() == oppInd) // Jeœli ten s¹siad nale¿y do przeciwnika
+		if (N->GetState() == oppInd) // Jeœli ten s¹siad nale¿y do przeciwnika
 		{
 			std::vector <Field*> ToChange; // Wektor adresów pól do zmiany
 			ToChange.push_back(N); // Wstêpnie wstawiamy N
@@ -259,24 +288,31 @@ void Engine::Logic::changePawns(Field *F, State plInd)
 				Field *Npp = neighbr(N, versor); // Bierzemy nastêpnika pola N
 				if (Npp == nullptr) // Jeœli nastêpnik N nie istnieje (jesteœmy przy krawêdzi planszy)
 					break;
-				if (Npp->Get() == none) // Jeœli nastêpnik N jest pusty, to ruch w tym kierunku niedozwolony
+				if (Npp->GetState() == none) // Jeœli nastêpnik N jest pusty, to ruch w tym kierunku niedozwolony
 					break;
-				if (Npp->Get() == oppInd) // Jeœli nastêpnik N te¿ nale¿y do przeciwnika, jedziemy dalej
+				if (Npp->GetState() == oppInd) // Jeœli nastêpnik N te¿ nale¿y do przeciwnika, jedziemy dalej
 				{
 					ToChange.push_back(Npp);
 					N = Npp;
 					continue;
 				}
-				if (Npp->Get() == plInd) // Jeœli nastêpnik N nale¿y do nas, to ruch w tym kierunku jest mo¿liwy
+				if (Npp->GetState() == plInd) // Jeœli nastêpnik N nale¿y do nas, to ruch w tym kierunku jest mo¿liwy
 				{
-					for (Field *f : ToChange)
+					/*for (Field *f : ToChange)
 					{
-						f->Set(plInd);
+						f->SetState(plInd);
 					}
+					break;
+					*/
+					FieldsToAttack.insert(FieldsToAttack.end(), ToChange.begin(), ToChange.end());
+					
 					break;
 				}
 			}
 			ToChange.clear();
 		}
 	}
+
+	return FieldsToAttack;
+
 }

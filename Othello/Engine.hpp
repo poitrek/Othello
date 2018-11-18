@@ -3,6 +3,8 @@
 #include "SideMenu.h"
 #include "MouseHandler.hpp"
 
+class Machine;
+
 typedef std::pair<int, int> pair_;
 
 class Engine
@@ -10,16 +12,20 @@ class Engine
 
 public:
 
+	friend class Machine;
+
 	static Field **FieldTab;
-		
-	static void MakeTheMove(std::vector<Field*> &FieldVector, std::vector<Pawn*> &PawnVector);
+	
+	static void MakeTheMove(std::vector<Field*> &FieldVector, std::vector<Pawn*> &PawnVector, Field *field);
 
 	static void HandleNextMove(std::vector<Field*> &FieldVector, SideMenu &sideMenu);
 
-	static void HandleMouseHover(std::vector<Field*> &FieldVector, sf::RenderTarget &target);
+	static void HandleMouseHover(std::vector<Field*> &FieldVector);
 
-	static void HandlePlayerMove(std::vector<Field*> &FieldVector, std::vector<Pawn*> &PawnVector, SideMenu &sideMenu, sf::RenderTarget &target);
+	static void HandlePlayerMove(std::vector<Field*> &FieldVector, std::vector<Pawn*> &PawnVector, SideMenu &sideMenu);
 
+
+	static void ResolveFields(std::vector<Field*> &AttackedFields, FieldState NewOwner);
 
 	static void UpdateAvailableFields(std::vector<Field*> &FieldVector);
 
@@ -27,7 +33,7 @@ public:
 
 	static void ChangeCurrentPlayer();
 
-	static State EndOfGame(std::vector<Field*> &FieldVector);
+	static FieldState IsGameOver(std::vector<Field*> &FieldVector);
 
 	
 
@@ -39,9 +45,9 @@ public:
 			int b = 0, w = 0;
 			for (Field *F : FieldTab)
 			{
-				if (F->Get() == p1)
+				if (F->GetState() == p1)
 					b++;
-				if (F->Get() == p2)
+				if (F->GetState() == p2)
 					w++;
 			}
 			blacks = b;
@@ -50,7 +56,11 @@ public:
 		}
 	};
 	
-	static State GetCurrentPlayer();
+	static FieldState GetPlayerIndex();
+
+	static FieldState GetComputerIndex();
+
+	static FieldState GetCurrentPlayer();
 	
 
 
@@ -58,9 +68,15 @@ public:
 
 private:
 
-	static Field * fCur;
 
-	static State CurPlayer;
+	static FieldState CurPlayer;
+
+	static const FieldState PlayerIndex;
+
+	static const FieldState ComputerIndex;
+
+
+	static Field * fCur;
 
 	static std::vector<Field*> AvailableFields;
 
@@ -68,23 +84,23 @@ private:
 
 
 	struct Logic	{
-		
+
 		static std::vector <pair_> Versor;
 
 		static void setup_Versor();
 
 		// Funkcja zwracaj¹ca indeks przeciwnika danego gracza
-		static State opponentIndex(State playerIndex);
+		static FieldState opponentIndex(FieldState playerIndex);
 
 		// Funkcja zwracaj¹ca adres pola przesuniêtego o dany wersor wzglêdem *F (lub nullptr jeœli
 		// takiego s¹siada nie ma, bo jesteœmy przy krawêdzi planszy)
 		static Field *neighbr(Field *F, pair_ versor);
 
 		// Funkcja sprawdzaj¹ca, czy na polu o adresie F gracz o indeksie plInd mo¿e postawiæ pionek
-		static bool isMoveValid(Field *F, State plInd);
+		static bool isMoveValid(Field *F, FieldState plInd);
 
-		// Funkcja zmieniaj¹ca odpowiednie pionki po wykonaniu ruchu
-		static void changePawns(Field *F, State plInd);
+		// Funkcja zwracaj¹ca wektor pól/pionków atakowanych z pola F przez gracza plInd
+		static std::vector<Field*> findAttackedPawns(Field *F, FieldState plInd);
 
 
 	};

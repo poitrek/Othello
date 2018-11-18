@@ -1,6 +1,6 @@
 #pragma once
 #include <SFML\Graphics.hpp>
-enum State { p1, p2, none };
+enum FieldState { p1, p2, none };
 // Stan pola - czy nale¿y do gracza 1, gracza 2, czy jest puste
 
 

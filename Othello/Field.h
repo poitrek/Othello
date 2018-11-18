@@ -12,7 +12,7 @@ private:
 	float scaleFactor{ 0.25f }; /// Czynnik, przez jaki musimy przemno¿yæ wymiary tekstury, aby uzyskaæ
 							    ///  ¿¹dane wymiary sprite'a (chyba ju¿ niepotrzebne)
 
-	State state; // Stan pola (przynale¿noœæ)
+	FieldState state; // Stan pola (przynale¿noœæ)
 	Pawn *pawn; // WskaŸnik na (ewentualny) znajduj¹cy siê na polu pionek
 	int ind_X;
 	int ind_Y;
@@ -23,24 +23,24 @@ public:
 	~Field();
 
 	sf::Vector2f getSize();
-	void Set(State _state); // Ustawiamy stan pola
-	State Get() { return state; } // Sprawdzamy stan pola
+	void SetState(FieldState _state); // Ustawiamy stan pola
+	FieldState GetState() { return state; } // Sprawdzamy stan pola
 	void setX(int X) { ind_X = X; }
 	void setY(int Y) { ind_Y = Y; }
 	int X() { return ind_X; }
 	int Y() { return ind_Y; }
 	bool Available; // Informacja o tym, czy w danym momencie gry na polu dany gracz mo¿e postawiæ pionek
-							
+	
 	void setPosition(float x, float y); // Ustawiamy pozycjê z u¿yciem 2 float'ów
 	
 	static GameObject* pawnShadow; // Pojawiaj¹ca siê poœwiata pionka, gdy chcemy go postawiæ
 	
 	
 	static void setPawnShadow();
-	static void updatePawnShadow(State curPlayer);
+	static void updatePawnShadow(FieldState curPlayer);
 	static void setPawnShadowPosition(Field *field);
 	
 	friend class Creator;
-	friend Pawn::Pawn(Field&, State); // Konstruktor klasy Pionek jest funkcj¹ zaprzyjaŸnion¹ z t¹ klas¹
+	friend Pawn::Pawn(Field&, FieldState); // Konstruktor klasy Pionek jest funkcj¹ zaprzyjaŸnion¹ z t¹ klas¹
 };
 

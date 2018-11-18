@@ -10,7 +10,7 @@ sf::Texture* Pawn::texture_b;
 sf::Texture* Pawn::texture_w;
 float Pawn::pawnSize;
 
-Pawn::Pawn(Field &F, State playerIndex)
+Pawn::Pawn(Field &F, FieldState playerIndex)
 {
 	
 	switch (playerIndex)
@@ -32,7 +32,7 @@ Pawn::Pawn(Field &F, State playerIndex)
 	//std::cout << "fPos: " << fPos.x << ", " << fPos.y << std::endl;
 	//std::cout << "round(fPos): " << round(fPos.x) << ", " << round(fPos.y) << std::endl;
 	sprite.setPosition({ round(fPos.x), round(fPos.y) });
-	F.Set(playerIndex);  // Nadajemy ju¿ temu polu odpowiedni indeks
+	F.SetState(playerIndex);  // Nadajemy ju¿ temu polu odpowiedni indeks
 	F.pawn = this;  // I przekazujemy temu polu adres tego pionka
 }
 
@@ -62,7 +62,7 @@ void Pawn::setTextures()
 	texture_w->setSmooth(true);
 }
 
-void Pawn::Set(State playerIndex)
+void Pawn::Set(FieldState playerIndex)
 {
 	switch (playerIndex)
 	{
