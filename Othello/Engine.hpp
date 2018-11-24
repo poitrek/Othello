@@ -16,13 +16,13 @@ public:
 
 	static Field **FieldTab;
 	
-	static void MakeTheMove(std::vector<Field*> &FieldVector, std::vector<Pawn*> &PawnVector, Field *field);
+	static void MakeTheMove(std::vector<Field*> &FieldVector, _pawnPointers &PawnVector, Field *field);
 
 	static void HandleNextMove(std::vector<Field*> &FieldVector, SideMenu &sideMenu);
 
 	static void HandleMouseHover(std::vector<Field*> &FieldVector);
 
-	static void HandlePlayerMove(std::vector<Field*> &FieldVector, std::vector<Pawn*> &PawnVector, SideMenu &sideMenu);
+	static void HandlePlayerMove(std::vector<Field*> &FieldVector, _pawnPointers &PawnVector, SideMenu &sideMenu);
 
 
 	static void ResolveFields(std::vector<Field*> &AttackedFields, FieldState NewOwner);

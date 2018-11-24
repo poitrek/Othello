@@ -1,7 +1,6 @@
 #pragma once
 #include "GameObject.h"
 #include "Pawn.h"
-#include "circleTexture.h"
 
 class Field : public GameObject
 {

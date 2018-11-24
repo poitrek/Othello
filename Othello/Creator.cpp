@@ -42,29 +42,36 @@ std::vector<Field*> Creator::SetFieldVector(Field **fieldTab)
 	return FieldVector;
 }
 
-void Creator::FirstPawns(std::vector<Pawn*> &PawnVector, Field **field)
+void Creator::FirstPawns(_pawnPointers &PawnVector, Field **field)
 {
-	Pawn *veryFirst = new Pawn;
-	veryFirst->setTextures();
-	//Pawn::setTextures();
+	Pawn::setTextures();
 	Pawn::pawnSize = 0.8f * Field::fieldSize;
 
-	Pawn *pawn1 = new Pawn(field[3][3], p2);
-	Pawn *pawn2 = new Pawn(field[3][4], p1);
-	Pawn *pawn3 = new Pawn(field[4][3], p1);
-	Pawn *pawn4 = new Pawn(field[4][4], p2);
+	/// Surprisingly, this initialization doesn't compile
+	//_pawnPtr pawn01 = _pawnPtr(new Pawn(field[3][3], p2));
+
+	/// But these do
+	//_pawnPtr pawn00 = std::shared_ptr<Pawn>(new Pawn(field[3][3], p2));
+	//std::shared_ptr<Pawn> pawn0 = std::shared_ptr<Pawn>(new Pawn(field[3][3], p2));
+
+	std::shared_ptr<Pawn> pawn1(new Pawn(field[3][3], p2));
+	std::shared_ptr<Pawn> pawn2(new Pawn(field[3][4], p1));
+	std::shared_ptr<Pawn> pawn3(new Pawn(field[4][3], p1));
+	std::shared_ptr<Pawn> pawn4(new Pawn(field[4][4], p2));
+
 
 	PawnVector.push_back(pawn1);
 	PawnVector.push_back(pawn2);
 	PawnVector.push_back(pawn3);
 	PawnVector.push_back(pawn4);
 
-	Renderer::Add(pawn1, 3);
-	Renderer::Add(pawn2, 3);
-	Renderer::Add(pawn3, 3);
-	Renderer::Add(pawn4, 3);
 
-	delete veryFirst;
+	Renderer::Add(pawn1.get(), 3);
+	Renderer::Add(pawn2.get(), 3);
+	Renderer::Add(pawn3.get(), 3);
+	Renderer::Add(pawn4.get(), 3);
+
+
 }
 
 void Creator::CreateSideMenu(SideMenu &sideMenu, sf::RenderWindow & window, Board & board)

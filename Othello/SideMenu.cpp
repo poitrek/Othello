@@ -1,11 +1,15 @@
 #include "stdafx.h"
 #include "SideMenu.h"
-#include <iostream>
+#include "PawnTexture.hpp"
 
 
-extern sf::Texture *texture_w;
-extern sf::Texture *texture_b;
-extern void tex_setup();
+void SideMenu::setSpriteSize(sf::Sprite & sprite, sf::Vector2f vec)
+{
+	float scaleX = vec.x / sprite.getTexture()->getSize().x;
+	float scaleY = vec.y / sprite.getTexture()->getSize().y;
+	sprite.setScale(scaleX, scaleY);
+}
+
 
 SideMenu::SideMenu()
 {
@@ -20,6 +24,7 @@ SideMenu::SideMenu()
 
 SideMenu::~SideMenu()
 {
+
 }
 
 void SideMenu::setLabels()
@@ -35,16 +40,17 @@ void SideMenu::setLabels()
 	sf::Vector2f pos1 = getPosition() + sf::Vector2f{20.0f, 30.0f};
 	label1.setPosition(pos1);
 	label2.setPosition(pos1 + sf::Vector2f{ 0, 160.0f });
-		
-	tex_setup();
-	playerThumbnail.setTexture(*texture_b);
+
+	PawnTexture::Init();
+	
+	playerThumbnail.setTexture(*PawnTexture::blackPawn);
 	sf::Vector2f vec{55.0f, 55.0f};
 	sf::Vector2f vec2{ 37.5f, 37.5f };
 	setSpriteSize(playerThumbnail, vec);
 	playerThumbnail.setPosition(label1.getPosition() + sf::Vector2f(35.0f, 35.0f));
 
-	playerThumbnail_b.setTexture(*texture_b);
-	playerThumbnail_w.setTexture(*texture_w);
+	playerThumbnail_b.setTexture(*PawnTexture::blackPawn);
+	playerThumbnail_w.setTexture(*PawnTexture::whitePawn);
 	setSpriteSize(playerThumbnail_b, vec2);
 	setSpriteSize(playerThumbnail_w, vec2);
 	playerThumbnail_w.setPosition(label2.getPosition() + sf::Vector2f(25.0f, 40.0f));
@@ -74,10 +80,10 @@ void SideMenu::update(FieldState curPlayer, std::pair<int, int> numOfPawns)
 	switch(curPlayer)
 	{
 	case p1:
-		playerThumbnail.setTexture(*texture_b);
+		playerThumbnail.setTexture(*PawnTexture::blackPawn);
 		break;
 	case p2:
-		playerThumbnail.setTexture(*texture_w);
+		playerThumbnail.setTexture(*PawnTexture::whitePawn);
 	}
 	num_b.setString(std::to_string(numOfPawns.first));
 	num_w.setString(std::to_string(numOfPawns.second));

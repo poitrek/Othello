@@ -1,11 +1,12 @@
 #pragma once
 #include <SFML\Graphics.hpp>
-enum FieldState { p1, p2, none };
+
 // Stan pola - czy nale¿y do gracza 1, gracza 2, czy jest puste
+enum FieldState { p1, p2, none };
 
 
 
-class GameObject// : public sf::Drawable
+class GameObject
 {
 
 protected:
@@ -28,7 +29,7 @@ public:
 	void setPosition(sf::Vector2f);
 	virtual sf::Vector2f getPosition();
 	void setOriginToCenter();
-	sf::Sprite *getSprite();
+	void setColor(const sf::Color &color);
 
 	virtual void draw(sf::RenderTarget& target);
 

@@ -50,9 +50,9 @@ void GameObject::setOriginToCenter()
 	sprite.setOrigin(texsize.x * 0.5f, texsize.y * 0.5f);
 }
 
-sf::Sprite * GameObject::getSprite()
+void GameObject::setColor(const sf::Color &color)
 {
-	return &(this->sprite);
+	this->sprite.setColor(color);
 }
 
 void GameObject::draw(sf::RenderTarget &target)

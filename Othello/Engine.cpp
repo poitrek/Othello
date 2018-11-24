@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "Engine.hpp"
 #include "Game.hpp"
+#include "BoardFeatures.hpp"
 
 Field* Engine::fCur{ nullptr };
 
@@ -20,12 +21,19 @@ int Engine::NumberOfPawns::whites{ 2 };
 
 
 
-void Engine::MakeTheMove(std::vector<Field*> &FieldVector, std::vector<Pawn*>& PawnVector, Field *field)
+void Engine::MakeTheMove(std::vector<Field*> &FieldVector, _pawnPointers &PawnVector, Field *field)
 {
+	_pawnPtr pp = _pawnPtr(new Pawn(*field, CurPlayer));
+
+	PawnVector.push_back(pp);
+	Renderer::Add(pp.get(), 3);
+
+	/*
 	Pawn *P = new Pawn(*field, CurPlayer); // Tworzymy na tym polu w³aœciwy pionek
 	//P->Place(PawnVector);
 	PawnVector.push_back(P); // Pionek wstawiamy do wektora
 	Renderer::Add(P, 3);
+	*/
 
 	auto FieldsToAttack = Logic::findAttackedPawns(field, CurPlayer); // Zmieniamy odpowiednie pionki
 	ResolveFields(FieldsToAttack, CurPlayer);
@@ -60,6 +68,23 @@ void Engine::HandleNextMove(std::vector<Field*>& FieldVector, SideMenu & sideMen
 	nOP_pair.second = NumberOfPawns::whites;
 
 	sideMenu.update(Engine::GetCurrentPlayer(), nOP_pair);
+
+	
+	// Remove recent field frames
+	for (std::shared_ptr<GameObject> fieldFrame : BoardFeatures::AvailableFieldsFrames)
+	{
+		Renderer::Remove(fieldFrame.get());
+	}
+
+	// Update available field frames
+	BoardFeatures::SetAvailableFieldsFrames(Engine::AvailableFields);
+
+	// Add updated field frames to the Renderer again
+	for (std::shared_ptr<GameObject> fieldFrame : BoardFeatures::AvailableFieldsFrames)
+	{
+		Renderer::Add(fieldFrame.get(), 3);
+	}
+	
 
 }
 
@@ -100,7 +125,7 @@ void Engine::HandleMouseHover(std::vector<Field*>& FieldVector)
 }
 
 void Engine::HandlePlayerMove(std::vector<Field*>& FieldVector,
-	std::vector<Pawn*> &PawnVector, SideMenu &sideMenu)
+	_pawnPointers &PawnVector, SideMenu &sideMenu)
 {
 
 	if (fCur != nullptr)

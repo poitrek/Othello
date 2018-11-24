@@ -28,7 +28,6 @@ void Renderer::AddLayers(int n)
 	number_of_layers = n;
 }
 
-
 void Renderer::Add(GameObject * obj, int layerId)
 {
 	objects[layerId - 1].push_back(obj);
@@ -50,6 +49,20 @@ void Renderer::Remove(GameObject * obj)
 	// and then removed from the proper layer
 	// Erase-remove idiom
 	//objects.erase(std::remove(objects.begin(), objects.end(), obj), objects.end());
+
+
+	for (std::vector<GameObject*> &layer : objects)
+	{
+		layer.erase(std::remove(layer.begin(), layer.end(), obj), layer.end());
+	}
+
+}
+
+void Renderer::Remove(GameObject * obj, int layerId)
+{
+	std::vector<GameObject*> &layer = objects[layerId];
+
+	layer.erase(std::remove(layer.begin(), layer.end(), obj), layer.end());	
 }
 
 void Renderer::DrawAll(sf::RenderTarget &target)
@@ -62,12 +75,18 @@ void Renderer::DrawAll(sf::RenderTarget &target)
 		// Drawing permanent objects that were added to the vector
 		for (auto it = objects[i].begin(); it != objects[i].end(); it++)
 		{
-			(*it)->draw(target);
+			if ((*it) != nullptr)
+			{
+				(*it)->draw(target);
+			}
 		}
 		// Drawing temporary objects that were called to be drawn in a given game loop
 		for (auto it = temp_objects[i].begin(); it != temp_objects[i].end(); it++)
 		{
-			(*it)->draw(target);
+			if ((*it) != nullptr)
+			{
+				(*it)->draw(target);
+			}
 		}
 	}
 

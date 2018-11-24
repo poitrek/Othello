@@ -40,7 +40,7 @@ Pawn::~Pawn()
 {	
 }
 
-void Pawn::Place(std::vector<Pawn*> pawnTab)
+void Pawn::Place(std::vector<Pawn*> &pawnTab)
 {
 	pawnTab.push_back(this);
 	Renderer::Add(this, 3);
@@ -50,13 +50,13 @@ void Pawn::setTextures()
 {
 	texture_b = new sf::Texture;
 	texture_w = new sf::Texture;
-	if (!texture_b->loadFromFile(this->file_name_b))
+	if (!texture_b->loadFromFile(Pawn::file_name_b))
 	{
-		std::cout << "Error [Pawn::Pawn()]: nie udalo sie otworzyc pliku " << this->file_name_b << std::endl;
+		std::cout << "Error [Pawn::Pawn()]: nie udalo sie otworzyc pliku " << Pawn::file_name_b << std::endl;
 	}
-	if (!texture_w->loadFromFile(this->file_name_w))
+	if (!texture_w->loadFromFile(Pawn::file_name_w))
 	{
-		std::cout << "Error [Pawn::Pawn()]: nie udalo sie otworzyc pliku " << this->file_name_w << std::endl;
+		std::cout << "Error [Pawn::Pawn()]: nie udalo sie otworzyc pliku " << Pawn::file_name_w << std::endl;
 	}
 	texture_b->setSmooth(true);
 	texture_w->setSmooth(true);
@@ -79,4 +79,10 @@ void Pawn::Set(FieldState playerIndex)
 float Pawn::getPawnSize()
 {
 	return Pawn::pawnSize;
+}
+
+void Pawn::Clear()
+{
+	delete Pawn::texture_b;
+	delete Pawn::texture_w;
 }

@@ -1,6 +1,5 @@
 #pragma once
 #include "GameObject.h"
-#include "circleTexture.h"
 #include "Field.h"
 
 
@@ -22,6 +21,8 @@ private:
 	sf::Sprite playerThumbnail;
 	sf::Sprite playerThumbnail_b;
 	sf::Sprite playerThumbnail_w;
+
+	void setSpriteSize(sf::Sprite &sprite, sf::Vector2f vec);
 
 public:
 
