@@ -8,6 +8,7 @@ class Renderer
 {	
 
 public:
+	Renderer(){}
 	Renderer(int numberOfLayers);
 
 	// Adds given object on the chosen layer to draw in every game loop

@@ -1,2 +1,5 @@
-﻿  BoardFeatures.cpp
+﻿  Engine.cpp
+  Game.cpp
+  Othello.cpp
+  Generating Code...
   Othello.vcxproj -> C:\Users\Piotr\source\repos\Othello\Debug\Othello.exe
