@@ -27,6 +27,8 @@ void Game::Init()
 	window.create(sf::VideoMode(840, 520), "Othello", sf::Style::Close);
 
 
+
+
 }
 
 void Game::GameLoop()
@@ -47,6 +49,8 @@ void Game::GameLoop()
 			break;
 		}
 	}
+
+
 
 
 	window.clear(sf::Color(140, 112, 60));
