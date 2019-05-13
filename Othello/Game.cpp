@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "Game.hpp"
+#include "Creator.hpp"
 
 Game::GameState Game::State{ Game::Playing };
 
@@ -26,8 +27,7 @@ void Game::Init()
 
 	window.create(sf::VideoMode(840, 520), "Othello", sf::Style::Close);
 
-
-
+	//Creator::DrawFields()
 
 }
 
@@ -51,6 +51,19 @@ void Game::GameLoop()
 	}
 
 
+	switch (Game::State)
+	{
+	case Game::Playing:
+
+
+
+		break;
+	case Game::Over:
+
+		break;
+	default:
+		break;
+	}
 
 
 	window.clear(sf::Color(140, 112, 60));

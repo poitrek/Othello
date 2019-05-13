@@ -2,14 +2,22 @@
 #include "Renderer.hpp"
 
 
-std::vector<std::vector<GameObject*> > Renderer::objects;
-std::vector<std::vector<GameObject*> > Renderer::temp_objects;
+std::vector<std::vector<GameObject*> > View::Renderer::objects;
+std::vector<std::vector<GameObject*> > View::Renderer::temp_objects;
 
-int Renderer::number_of_layers{ 0 };
-//int Renderer::layer_iterator{ 0 };
+int View::Renderer::number_of_layers{ 0 };
+//int View::Renderer::layer_iterator{ 0 };
 
 
-Renderer::Renderer(int numberOfLayers)
+void View::init()
+{
+	Renderer::AddLayers(3);
+
+
+}
+
+
+View::Renderer::Renderer(int numberOfLayers)
 {
 	for (int i = 0; i < numberOfLayers; i++)
 	{
@@ -18,7 +26,7 @@ Renderer::Renderer(int numberOfLayers)
 	number_of_layers = numberOfLayers;
 }
 
-void Renderer::AddLayers(int n)
+void View::Renderer::AddLayers(int n)
 {
 	for (int i = 0; i < n; i++)
 	{
@@ -28,22 +36,22 @@ void Renderer::AddLayers(int n)
 	number_of_layers = n;
 }
 
-void Renderer::Add(GameObject * obj, int layerId)
+void View::Renderer::Add(GameObject * obj, int layerId)
 {
 	objects[layerId - 1].push_back(obj);
 }
 
-void Renderer::AddOnTop(GameObject * obj)
+void View::Renderer::AddOnTop(GameObject * obj)
 {
 	objects[number_of_layers - 1].push_back(obj);
 }
 
-void Renderer::Draw(GameObject * obj, int layerId)
+void View::Renderer::Draw(GameObject * obj, int layerId)
 {
 	temp_objects[layerId - 1].push_back(obj);
 }
 
-void Renderer::Remove(GameObject * obj)
+void View::Renderer::Remove(GameObject * obj)
 {
 	// To do: given pointer to the object has to be found first
 	// and then removed from the proper layer
@@ -58,14 +66,14 @@ void Renderer::Remove(GameObject * obj)
 
 }
 
-void Renderer::Remove(GameObject * obj, int layerId)
+void View::Renderer::Remove(GameObject * obj, int layerId)
 {
 	std::vector<GameObject*> &layer = objects[layerId];
 
 	layer.erase(std::remove(layer.begin(), layer.end(), obj), layer.end());	
 }
 
-void Renderer::DrawAll(sf::RenderTarget &target)
+void View::Renderer::DrawAll(sf::RenderTarget &target)
 {
 	// For EVERY layer
 	for (int i = 0; i < number_of_layers; i++)
@@ -98,7 +106,7 @@ void Renderer::DrawAll(sf::RenderTarget &target)
 
 }
 
-void Renderer::Clear()
+void View::Renderer::Clear()
 {
 	for (int i = 0; i < number_of_layers - 1; i++)
 		objects[i].clear();

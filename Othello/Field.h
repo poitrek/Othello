@@ -24,14 +24,12 @@ public:
 	sf::Vector2f getSize();
 	void SetState(FieldState _state); // Ustawiamy stan pola
 	FieldState GetState() { return state; } // Sprawdzamy stan pola
-	void setX(int X) { ind_X = X; }
-	void setY(int Y) { ind_Y = Y; }
+
 	int X() { return ind_X; }
 	int Y() { return ind_Y; }
+
 	bool Available; // Informacja o tym, czy w danym momencie gry na polu dany gracz mo¿e postawiæ pionek
-	
-	void setPosition(float x, float y); // Ustawiamy pozycjê z u¿yciem 2 float'ów
-	
+		
 	static GameObject* pawnShadow; // Pojawiaj¹ca siê poœwiata pionka, gdy chcemy go postawiæ
 	
 	

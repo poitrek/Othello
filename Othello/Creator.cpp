@@ -20,10 +20,12 @@ void Creator::DrawFields(Board & board, Field **&fieldTab)
 	for (int i = 0; i < 8; i++)
 		for (int j = 0; j < 8; j++)
 		{
-			fieldTab[i][j].setX(i); fieldTab[i][j].setY(j);
+			fieldTab[i][j].ind_X = i;
+			fieldTab[i][j].ind_Y = j;
+			//fieldTab[i][j].setX(i); fieldTab[i][j].setY(j);
 			fieldTab[i][j].setSize({ Field::fieldSize, Field::fieldSize }); // Nastawiamy rozmiar pola na ten w³aœciwy
-			fieldTab[i][j].setPosition(board.getPosition().x + posBuf.x + i * Field::fieldSize,
-				board.getPosition().y + posBuf.y + j * Field::fieldSize); // i konsekwentn¹ pozycjê
+			fieldTab[i][j].setPosition(sf::Vector2f(board.getPosition().x + posBuf.x + i * Field::fieldSize,
+				board.getPosition().y + posBuf.y + j * Field::fieldSize)); // i konsekwentn¹ pozycjê
 		}
 	std::cout << fieldTab[0][0].getSize().x << ", " << fieldTab[0][0].getSize().y << std::endl;
 }
@@ -36,7 +38,7 @@ std::vector<Field*> Creator::SetFieldVector(Field **fieldTab)
 		for (int j = 0; j < 8; j++)
 		{
 			FieldVector.push_back(&fieldTab[i][j]);
-			Renderer::Add(&fieldTab[i][j], 2);
+			View::Renderer::Add(&fieldTab[i][j], 2);
 		}
 
 	return FieldVector;
@@ -66,10 +68,10 @@ void Creator::FirstPawns(_pawnPointers &PawnVector, Field **field)
 	PawnVector.push_back(pawn4);
 
 
-	Renderer::Add(pawn1.get(), 3);
-	Renderer::Add(pawn2.get(), 3);
-	Renderer::Add(pawn3.get(), 3);
-	Renderer::Add(pawn4.get(), 3);
+	View::Renderer::Add(pawn1.get(), 3);
+	View::Renderer::Add(pawn2.get(), 3);
+	View::Renderer::Add(pawn3.get(), 3);
+	View::Renderer::Add(pawn4.get(), 3);
 
 
 }

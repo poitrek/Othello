@@ -52,11 +52,6 @@ void Field::SetState(FieldState _state)
 		pawn->Set(_state);
 }
 
-void Field::setPosition(float x, float y)
-{
-	sprite.setPosition(x, y);
-}
-
 
 //std::shared_ptr<GameObject> Field::pawnShadow(nullptr);
 GameObject* Field::pawnShadow(nullptr);
